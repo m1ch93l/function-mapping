@@ -20,11 +20,39 @@ function readUser($conn)
     foreach ($users as $user) : ?>
         <tr>
             <td><?= htmlspecialchars($user['fullname']) ?>
+                <!-- e-click para sa lumabas ang modal -->
+                <button type="button" hx-get="crud.php?action=edit&id=<?= $user['id'] ?>" hx-target="#modalBody"
+                    hx-trigger="click" hx-swap="innerHTML" data-bs-toggle="modal" data-bs-target="#showEachCard">
+                    Edit
+                </button>
                 <button hx-get="crud.php?action=delete&id=<?= $user['id'] ?>&inline=1">x
                 </button>
             </td>
         </tr>
     <?php endforeach;
+}
+function editUser($conn)
+{
+    $sql  = "SELECT * FROM user WHERE id = :id";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':id', $_GET['id']);
+    $stmt->execute();
+    $user = $stmt->fetch(PDO::FETCH_ASSOC); ?>
+
+    <form hx-post="crud.php?action=update">
+        <input type="hidden" name="id" value="<?= $user['id'] ?>">
+        <input type="text" name="fullname" value="<?= $user['fullname'] ?>">
+        <button>Save</button>
+    </form>
+    <?php
+}
+function updateUser($conn)
+{
+    $sql  = 'UPDATE user SET fullname = :fullname WHERE id = :id';
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':fullname', $_POST['fullname']);
+    $stmt->bindParam(':id', $_POST['id']);
+    $stmt->execute();
 }
 function deleteUser($conn)
 {
@@ -38,6 +66,8 @@ function deleteUser($conn)
 $actions = [
     'create' => 'createUser',
     'read'   => 'readUser',
+    'edit'   => 'editUser',
+    'update' => 'updateUser',
     'delete' => 'deleteUser',
 ];
 
