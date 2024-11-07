@@ -42,7 +42,7 @@ function editUser($conn)
     <form hx-post="crud.php?action=update">
         <input type="hidden" name="id" value="<?= $user['id'] ?>">
         <input type="text" name="fullname" value="<?= $user['fullname'] ?>">
-        <button>Save</button>
+        <button data-bs-dismiss="modal">Save</button>
     </form>
     <?php
 }
