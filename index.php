@@ -28,12 +28,13 @@
 
         <form hx-post="crud.php?action=create" hx-target="#user-list" hx-swap="beforeend">
             <input name="fullname" type="text">
-            <button>Add Student</button>
+            <button class="btn btn-sm btn-success">Add Student</button>
         </form>
-        <table>
+        <table class="table table-hover">
             <thead>
                 <tr>
                     <th>Fullname</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody id="user-list" hx-get="crud.php?action=read" hx-trigger="load, every 2s">
