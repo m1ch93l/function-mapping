@@ -16,11 +16,11 @@
 </head>
 
 <body id="index">
-    <nav>
-        <a href="index.php" hx-get="index.php" hx-target="#index" hx-swap="innerHTML">Logo</a>
+    <nav class="bg-success">
+        <a class="navbar-brand" href="index.php" hx-get="index.php" hx-target="#index" hx-swap="innerHTML">Logo</a>
         
-        <a type="button" class="text-decoration-none" hx-get="about.php" hx-target="#content" hx-swap="innerHTML">About</a>
-        <a type="button" class="text-decoration-none" hx-get="contact.php" hx-target="#content" hx-swap="innerHTML">Contact</a>
+        <a type="button" class="text-decoration-none text-white mx-2" hx-get="about.php" hx-target="#content" hx-swap="innerHTML">About</a>
+        <a type="button" class="text-decoration-none text-white mx-2" hx-get="contact.php" hx-target="#content" hx-swap="innerHTML">Contact</a>
     </nav>
     <div id="content">
         <h1>Welcome!</h1>
