@@ -15,34 +15,46 @@
         crossorigin="anonymous"></script>
 </head>
 
-<body>
-    <form hx-post="crud.php?action=create" hx-target="#user-list" hx-swap="beforeend">
-        <input name="fullname" type="text">
-        <button>Add Student</button>
-    </form>
-    <table>
-        <thead>
-            <tr>
-                <th>Fullname</th>
-            </tr>
-        </thead>
-        <tbody id="user-list" hx-get="crud.php?action=read" hx-trigger="load, every 2s">
-        </tbody>
-    </table>
-    <!-- Modal para sa bawat user -->
-    <div class="modal fade" id="showEachCard" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                </div>
-                <!-- mag add ng id kagaya ng "modalBody" para sa handle ng parameter -->
-                <div class="modal-body" id="modalBody">
-                    ...
+<body id="index">
+    <nav>
+        <a href="index.php" hx-get="index.php" hx-target="#index" hx-swap="innerHTML">Logo</a>
+        
+        <a type="button" class="text-decoration-none" hx-get="about.php" hx-target="#content" hx-swap="innerHTML">About</a>
+        <a type="button" class="text-decoration-none" hx-get="contact.php" hx-target="#content" hx-swap="innerHTML">Contact</a>
+    </nav>
+    <div id="content">
+        <h1>Welcome!</h1>
+        <p>Select a section from the navigation bar above.</p>
+
+        <form hx-post="crud.php?action=create" hx-target="#user-list" hx-swap="beforeend">
+            <input name="fullname" type="text">
+            <button>Add Student</button>
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>Fullname</th>
+                </tr>
+            </thead>
+            <tbody id="user-list" hx-get="crud.php?action=read" hx-trigger="load, every 2s">
+            </tbody>
+        </table>
+        <!-- Modal para sa bawat user -->
+        <div class="modal fade" id="showEachCard" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    </div>
+                    <!-- mag add ng id kagaya ng "modalBody" para sa handle ng parameter -->
+                    <div class="modal-body" id="modalBody">
+                        ...
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
 </body>
 
 </html>
