@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 27, 2025 at 07:43 AM
+-- Generation Time: Mar 27, 2025 at 07:58 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `user` (
   `id` int NOT NULL,
-  `fullname` varchar(255) NOT NULL
+  `fullname` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
@@ -37,7 +37,8 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `fullname`) VALUES
-(1, 'Michael Bañaria');
+(1, 'Michael BaÃ±aria'),
+(2, 'Sample Human');
 
 --
 -- Indexes for dumped tables
@@ -57,7 +58,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
