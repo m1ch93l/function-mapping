@@ -1,3 +1,3 @@
 <?php 
 
-echo "Contact";
+echo "CONTACT PAGE";

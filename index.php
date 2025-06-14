@@ -16,13 +16,17 @@
 </head>
 
 <body id="index">
-    <nav class="bg-success">
+
+    <nav class="bg-success py-3 px-5">
         <a class="navbar-brand" href="index.php" hx-get="index.php" hx-target="#index" hx-swap="innerHTML">Logo</a>
-        
-        <a type="button" class="text-decoration-none text-white mx-2" hx-get="about.php" hx-target="#content" hx-swap="innerHTML">About</a>
-        <a type="button" class="text-decoration-none text-white mx-2" hx-get="contact.php" hx-target="#content" hx-swap="innerHTML">Contact</a>
+
+        <a type="button" class="text-decoration-none text-white mx-2" hx-get="about.php" hx-target="#content"
+            hx-swap="innerHTML">About</a>
+        <a type="button" class="text-decoration-none text-white mx-2" hx-get="contact.php" hx-target="#content"
+            hx-swap="innerHTML">Contact</a>
     </nav>
-    <div id="content">
+
+    <div class="container-md" id="content">
         <h1>Welcome!</h1>
         <p>Select a section from the navigation bar above.</p>
 
@@ -30,16 +34,19 @@
             <input name="fullname" type="text">
             <button class="btn btn-sm btn-success">Add Student</button>
         </form>
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Fullname</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody id="user-list" hx-get="crud.php?action=read" hx-trigger="load, every 2s">
-            </tbody>
-        </table>
+        <div class="table-responsive border mt-2">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center">Fullname</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="user-list" hx-get="crud.php?action=read" hx-trigger="load, every 2s">
+                </tbody>
+            </table>
+        </div>
+
         <!-- Modal para sa bawat user -->
         <div class="modal fade" id="showEachCard" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -54,6 +61,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 
 </body>

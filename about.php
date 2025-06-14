@@ -1,3 +1,3 @@
 <?php 
 
-echo "about";
+echo "ABOUT PAGE";
