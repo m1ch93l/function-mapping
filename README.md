@@ -1,9 +1,9 @@
 # Function Mapping
     demonstrate how to map functions to actions
-# Features
+## Features
     - Create, Read, Update, Delete functions
     - Map functions to actions
-# Installation
+## Installation
     1. Clone the repository:
        ```bash
        git clone https://github.com/m1ch93l/function-mapping.git
@@ -16,6 +16,6 @@
        - You can use xampp, wamp, or any other local server setup.
        - Place the project files in the server's root directory (e.g., `htdocs` for XAMPP).
        - Access the application via your web browser at `http://localhost/function-mapping`.
-# Usage
+## Usage
     1. Open a web browser and navigate to `http://localhost/function-mapping`.
     2. Use the provided form to create, read, update, or delete functions.
