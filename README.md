@@ -1,5 +1,5 @@
 # Function Mapping
-    demonstrate how to map functions to actions
+    demonstrate how to map functions to actions using PHP with HTMX.
 ## Features
     - Create, Read, Update, Delete functions
     - Map functions to actions
