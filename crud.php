@@ -16,21 +16,8 @@ function readUser($conn)
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    foreach ($users as $user) : ?>
-        <tr>
-            <td><?= htmlspecialchars($user['fullname']) ?></td>
-            <td><!-- e-click para sa lumabas ang modal -->
-                <button type="button" hx-get="crud.php?action=edit&id=<?= $user['id'] ?>" hx-target="#modalBody"
-                    hx-trigger="click" hx-swap="innerHTML" data-bs-toggle="modal" data-bs-target="#showEachCard"
-                    class="btn btn-sm btn-success">
-                    Edit
-                </button>
-                <button hx-get="crud.php?action=delete&id=<?= $user['id'] ?>&inline=1">x
-                </button>
-            </td>
-        </tr>
-    <?php endforeach;
+    require_once __DIR__ . "/views/read-user.php";
+    return $users;
 }
 function editUser($conn)
 {
@@ -38,16 +25,9 @@ function editUser($conn)
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':id', $_GET['id']);
     $stmt->execute();
-    $user = $stmt->fetch(PDO::FETCH_ASSOC); ?>
-
-    <form hx-post="crud.php?action=update">
-        <div class="input-group input-group-sm">
-            <input type="hidden" name="id" value="<?= $user['id'] ?>">
-            <input type="text" class="form-control" name="fullname" value="<?= $user['fullname'] ?>">
-        </div>
-        <button class="btn btn-sm btn-success mt-2" data-bs-dismiss="modal">Save</button>
-    </form>
-    <?php
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    require_once __DIR__ . "/views/edit-user.php";
+    return $user;
 }
 function updateUser($conn)
 {
