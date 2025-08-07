@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . "/db/database.php";
+require_once __DIR__ . "/config/database.php";
 
 // Define CRUD functions
 function createUser($conn)
