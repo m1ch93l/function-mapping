@@ -6,10 +6,12 @@ foreach ($users as $user) : ?>
         <td class="text-center"><!-- e-click para sa lumabas ang modal -->
             <button type="button" hx-get="crud.php?action=edit&id=<?= $user['id'] ?>" hx-target="#modalBody"
                 hx-trigger="click" hx-swap="innerHTML" data-bs-toggle="modal" data-bs-target="#showEachCard"
+                hx-on::after-request="htmx.trigger('#user-list', 'refresh')"
                 class="btn btn-sm btn-success">
                 Edit
             </button>
-            <button class="btn btn-sm btn-danger" hx-get="crud.php?action=delete&id=<?= $user['id'] ?>&inline=1">
+            <button class="btn btn-sm btn-danger" hx-get="crud.php?action=delete&id=<?= $user['id'] ?>&inline=1"
+                hx-on::after-request="htmx.trigger('#user-list', 'refresh')">
                 Delete
             </button>
         </td>

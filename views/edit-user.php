@@ -1,4 +1,4 @@
-<form hx-post="crud.php?action=update">
+<form hx-post="crud.php?action=update" hx-on::after-request="htmx.trigger('#user-list', 'refresh'); setTimeout(() => bootstrap.Modal.getInstance(document.getElementById('showEachCard')).hide(), 100)">
     <div class="input-group input-group-sm">
         <input type="hidden" name="id" value="<?= $user['id'] ?>">
         <input type="text" class="form-control" name="fullname" value="<?= $user['fullname'] ?>">
