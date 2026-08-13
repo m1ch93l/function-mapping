@@ -14,10 +14,10 @@ function createUser($conn)
         exit;
     }
 
-    $sql = 'INSERT INTO user (fullname) VALUES (:fullname)';
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':fullname', $fullname);
+    $stmt = $conn->prepare('INSERT INTO user (fullname) VALUES (?)');
+    $stmt->bind_param('s', $fullname);
     $stmt->execute();
+    $stmt->close();
 
     header('Location: index.php');
     exit;
@@ -26,10 +26,8 @@ function createUser($conn)
 // READ: get all students so we can show them on the page.
 function readUser($conn)
 {
-    $sql = 'SELECT * FROM user ORDER BY id ASC';
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
-    $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $result = $conn->query('SELECT * FROM user ORDER BY id ASC');
+    $users = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
 
     require_once __DIR__ . '/views/read-user.php';
     return $users;
@@ -40,11 +38,17 @@ function editUser($conn)
 {
     $id = (int) ($_GET['id'] ?? 0);
 
-    $sql = 'SELECT * FROM user WHERE id = :id';
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    if ($id <= 0) {
+        header('Location: index.php');
+        exit;
+    }
+
+    $stmt = $conn->prepare('SELECT * FROM user WHERE id = ?');
+    $stmt->bind_param('i', $id);
     $stmt->execute();
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+    $stmt->close();
 
     if (!$user) {
         header('Location: index.php');
@@ -53,6 +57,35 @@ function editUser($conn)
 
     require_once __DIR__ . '/views/edit-user.php';
     return $user;
+}
+
+// getUser: return one student as JSON for the modal form.
+function getUser($conn)
+{
+    $id = (int) ($_GET['id'] ?? 0);
+
+    if ($id <= 0) {
+        header('Content-Type: application/json');
+        echo json_encode(['success' => false, 'message' => 'Invalid student ID.']);
+        exit;
+    }
+
+    $stmt = $conn->prepare('SELECT * FROM user WHERE id = ?');
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+    $stmt->close();
+
+    header('Content-Type: application/json');
+
+    if (!$user) {
+        echo json_encode(['success' => false, 'message' => 'Student not found.']);
+        exit;
+    }
+
+    echo json_encode(['success' => true, 'user' => $user]);
+    exit;
 }
 
 // UPDATE: save the new name for the selected student.
@@ -66,11 +99,10 @@ function updateUser($conn)
         exit;
     }
 
-    $sql = 'UPDATE user SET fullname = :fullname WHERE id = :id';
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':fullname', $fullname);
-    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt = $conn->prepare('UPDATE user SET fullname = ? WHERE id = ?');
+    $stmt->bind_param('si', $fullname, $id);
     $stmt->execute();
+    $stmt->close();
 
     header('Location: index.php');
     exit;
@@ -82,10 +114,10 @@ function deleteUser($conn)
     $id = (int) ($_GET['id'] ?? 0);
 
     if ($id > 0) {
-        $sql = 'DELETE FROM user WHERE id = :id';
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt = $conn->prepare('DELETE FROM user WHERE id = ?');
+        $stmt->bind_param('i', $id);
         $stmt->execute();
+        $stmt->close();
     }
 
     header('Location: index.php');
@@ -95,11 +127,12 @@ function deleteUser($conn)
 // This is the core idea of function mapping.
 // The action from the URL/form tells us which function to call.
 $actions = [
-    'create' => 'createUser',
-    'read'   => 'readUser',
-    'edit'   => 'editUser',
-    'update' => 'updateUser',
-    'delete' => 'deleteUser',
+    'create'   => 'createUser',
+    'read'     => 'readUser',
+    'edit'     => 'editUser',
+    'getUser'  => 'getUser',
+    'update'   => 'updateUser',
+    'delete'   => 'deleteUser',
 ];
 
 $action = $_GET['action'] ?? $_POST['action'] ?? '';
@@ -110,6 +143,7 @@ if (array_key_exists($action, $actions)) {
 
     if (function_exists($functionName)) {
         $functionName($conn);
+        exit;
     }
 }
 
