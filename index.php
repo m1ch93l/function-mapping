@@ -1,69 +1,87 @@
+<?php
+require_once __DIR__ . '/config/database.php';
+
+// First, read all students from the database.
+// Then we display them in a table on this page.
+$sql = 'SELECT * FROM user ORDER BY id ASC';
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="https://unpkg.com/htmx.org@2.0.3"
-        integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq"
-        crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+    <title>Function Mapping</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-
-<body id="index">
-
-    <nav class="bg-success py-3 px-5">
-        <a class="navbar-brand" href="index.php" hx-get="index.php" hx-target="#index" hx-swap="innerHTML">Logo</a>
-
-        <a type="button" class="text-decoration-none text-white mx-2" hx-get="about.php" hx-target="#content"
-            hx-swap="innerHTML">About</a>
-        <a type="button" class="text-decoration-none text-white mx-2" hx-get="contact.php" hx-target="#content"
-            hx-swap="innerHTML">Contact</a>
+<body class="bg-light">
+    <nav class="navbar navbar-dark bg-success px-4 py-3">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.php">Function Mapping</a>
+            <div>
+                <a class="text-white text-decoration-none me-3" href="index.php">Home</a>
+                <a class="text-white text-decoration-none me-3" href="about.php">About</a>
+                <a class="text-white text-decoration-none" href="contact.php">Contact</a>
+            </div>
+        </div>
     </nav>
 
-    <div class="container-md" id="content">
-        <h1>Welcome!</h1>
-        <p>Select a section from the navigation bar above.</p>
+    <div class="container py-5">
+        <h1 class="mb-3">Student Friendly CRUD Demo</h1>
+        <p class="text-muted">This project shows how a function can be mapped to an action in PHP.</p>
 
-        <form hx-post="crud.php?action=create" hx-target="#user-list" hx-swap="beforeend">
-            <input name="fullname" type="text">
-            <button class="btn btn-sm btn-success">Add Student</button>
-        </form>
-        <div class="table-responsive border mt-2">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th class="text-center">Fullname</th>
-                        <th class="text-center">Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="user-list" hx-get="crud.php?action=read" hx-trigger="load, every 2s">
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Modal para sa bawat user -->
-        <div class="modal fade" id="showEachCard" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h2 class="h5">Add a student</h2>
+                <!-- When this form is submitted, it sends action=create to crud.php -->
+                <form action="crud.php?action=create" method="post" class="row g-2 align-items-end">
+                    <div class="col-md-9">
+                        <label for="fullname" class="form-label">Full name</label>
+                        <input type="text" name="fullname" id="fullname" class="form-control" placeholder="Enter student name" required>
                     </div>
-                    <!-- mag add ng id kagaya ng "modalBody" para sa handle ng parameter -->
-                    <div class="modal-body" id="modalBody">
-                        ...
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-success w-100">Add Student</button>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
 
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="h5">Student list</h2>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover align-middle mb-0">
+                        <thead class="table-success">
+                            <tr>
+                                <th>#</th>
+                                <th>Full name</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (empty($users)): ?>
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted py-4">No students found yet.</td>
+                                </tr>
+                            <?php else: ?>
+                                <?php foreach ($users as $user): ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars((string) $user['id']) ?></td>
+                                        <td><?= htmlspecialchars($user['fullname']) ?></td>
+                                        <td class="text-center">
+                                            <a href="crud.php?action=edit&id=<?= (int) $user['id'] ?>" class="btn btn-sm btn-warning me-2">Edit</a>
+                                            <a href="crud.php?action=delete&id=<?= (int) $user['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this student?');">Delete</a>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
-
 </body>
-
 </html>
