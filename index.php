@@ -1,8 +1,8 @@
 <?php
-require_once __DIR__ . '/config/database.php';
+    require_once __DIR__ . '/config/database.php';
 
-$result = $conn->query('SELECT * FROM user ORDER BY id ASC');
-$users = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+    $result = $conn->query('SELECT * FROM user ORDER BY id ASC');
+    $users  = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -43,12 +43,12 @@ $users = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
         <?php else: ?>
         <?php foreach ($users as $user): ?>
         <tr>
-            <td><?= htmlspecialchars((string) $user['id']) ?></td>
-            <td><?= htmlspecialchars($user['fullname']) ?></td>
+            <td><?php echo (string) $user['id'] ?></td>
+            <td><?php echo $user['fullname'] ?></td>
             <td>
-                <a href="crud.php?action=edit&id=<?= (int) $user['id'] ?>">Edit</a>
+                <a href="crud.php?action=edit&id=<?php echo (int) $user['id'] ?>">Edit</a>
                 |
-                <a href="crud.php?action=delete&id=<?= (int) $user['id'] ?>"
+                <a href="crud.php?action=delete&id=<?php echo (int) $user['id'] ?>"
                     onclick="return confirm('Delete this student?');">Delete</a>
             </td>
         </tr>

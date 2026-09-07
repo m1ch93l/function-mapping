@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Student</title>
 </head>
+
 <body>
     <h1>Edit Student</h1>
     <nav>
@@ -12,14 +14,15 @@
     </nav>
 
     <form action="crud.php?action=update" method="post">
-        <input type="hidden" name="id" value="<?= (int) $user['id'] ?>">
+        <input type="hidden" name="id" value="<?php echo (int) $user['id'] ?>">
 
         <label for="fullname">Full name</label>
-        <input type="text" id="fullname" name="fullname" value="<?= htmlspecialchars($user['fullname']) ?>" required>
+        <input type="text" id="fullname" name="fullname" value="<?php echo $user['fullname'] ?>" required>
         <br><br>
 
         <button type="submit">Update Student</button>
         <a href="index.php">Cancel</a>
     </form>
 </body>
+
 </html>
